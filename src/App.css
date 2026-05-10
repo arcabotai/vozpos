@@ -1,0 +1,271 @@
+.app-shell {
+  width: min(1180px, calc(100% - 32px));
+  margin: 0 auto;
+  padding: 28px 0 40px;
+}
+
+.hero {
+  min-height: 230px;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 260px;
+  align-items: end;
+  gap: 24px;
+  padding: 34px 0 28px;
+  border-bottom: 1px solid var(--line);
+}
+
+.eyebrow {
+  margin: 0 0 12px;
+  color: var(--accent);
+  font-size: 0.82rem;
+  font-weight: 750;
+  text-transform: uppercase;
+}
+
+h1 {
+  margin: 0;
+  color: var(--ink);
+  font-size: clamp(3rem, 9vw, 7rem);
+  line-height: 0.92;
+}
+
+.lede {
+  max-width: 640px;
+  margin: 18px 0 0;
+  color: var(--muted);
+  font-size: clamp(1.1rem, 2vw, 1.45rem);
+}
+
+.hero-proof {
+  min-height: 190px;
+  display: grid;
+  align-content: center;
+  gap: 10px;
+  padding: 22px;
+  border: 1px solid var(--line);
+  background: var(--panel);
+}
+
+.hero-proof span {
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
+.hero-proof strong {
+  color: var(--ink);
+  font-size: 2.4rem;
+}
+
+.workflow {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
+  padding-top: 18px;
+}
+
+.panel {
+  min-height: 220px;
+  padding: 18px;
+  border: 1px solid var(--line);
+  background: var(--panel);
+}
+
+.order-panel,
+.validation-panel,
+.receipt-panel {
+  grid-column: span 1;
+}
+
+.section-heading {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 16px;
+}
+
+.section-heading span {
+  width: 28px;
+  height: 28px;
+  display: inline-grid;
+  place-items: center;
+  background: var(--accent);
+  color: #fff;
+  font-size: 0.9rem;
+  font-weight: 800;
+}
+
+h2,
+h3 {
+  margin: 0;
+  color: var(--ink);
+}
+
+h2 {
+  font-size: 1.05rem;
+}
+
+h3 {
+  margin-bottom: 10px;
+  font-size: 1.2rem;
+}
+
+label {
+  display: block;
+  margin-bottom: 8px;
+  color: var(--muted);
+  font-size: 0.9rem;
+  font-weight: 700;
+}
+
+textarea {
+  width: 100%;
+  box-sizing: border-box;
+  resize: vertical;
+  min-height: 108px;
+  padding: 12px;
+  border: 1px solid var(--line);
+  background: #fff;
+  color: var(--ink);
+  font: inherit;
+}
+
+button,
+.deep-link {
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 10px 14px;
+  border: 1px solid var(--ink);
+  background: var(--ink);
+  color: #fff;
+  font: inherit;
+  font-weight: 800;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+button:disabled {
+  cursor: not-allowed;
+  opacity: 0.45;
+}
+
+form button {
+  width: 100%;
+  margin-top: 12px;
+}
+
+.cart-lines {
+  display: grid;
+  gap: 10px;
+}
+
+.cart-line,
+.total-row,
+dl div {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--line);
+}
+
+.total-row {
+  margin-top: 18px;
+  color: var(--ink);
+  font-size: 1.25rem;
+}
+
+.muted {
+  color: var(--muted);
+}
+
+.qr-wrap {
+  width: fit-content;
+  padding: 12px;
+  margin-bottom: 12px;
+  background: #fff;
+  border: 1px solid var(--line);
+}
+
+.deep-link {
+  width: 100%;
+  box-sizing: border-box;
+  margin-bottom: 12px;
+  background: var(--accent);
+  border-color: var(--accent);
+}
+
+dl {
+  margin: 0;
+}
+
+dt {
+  color: var(--muted);
+  font-weight: 700;
+}
+
+dd {
+  margin: 0;
+  color: var(--ink);
+  text-align: right;
+  word-break: break-word;
+}
+
+ul {
+  margin: 0;
+  padding-left: 20px;
+  color: var(--muted);
+}
+
+.validation-panel.rejected {
+  border-color: var(--danger);
+}
+
+.validation-panel.accepted {
+  border-color: var(--success);
+}
+
+.actions {
+  display: grid;
+  gap: 10px;
+  margin-top: 18px;
+}
+
+.actions button:first-child {
+  background: #fff;
+  color: var(--ink);
+}
+
+.receipt-status {
+  margin: 0 0 14px;
+  color: var(--success);
+  font-size: 1.2rem;
+  font-weight: 850;
+}
+
+.topup-panel p {
+  color: var(--muted);
+}
+
+@media (max-width: 920px) {
+  .app-shell {
+    width: min(100% - 20px, 620px);
+    padding-top: 16px;
+  }
+
+  .hero,
+  .workflow {
+    grid-template-columns: 1fr;
+  }
+
+  .hero {
+    min-height: auto;
+    align-items: stretch;
+  }
+
+  .hero-proof {
+    min-height: 130px;
+  }
+}
