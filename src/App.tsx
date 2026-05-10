@@ -208,7 +208,7 @@ function App() {
   }
 
   return (
-    <ConversationProvider agentId={elevenLabsAgentId}>
+    <ConversationProvider agentId={elevenLabsAgentId} connectionType="websocket">
       <main className="app-shell">
         <section className="hero">
           <div>
