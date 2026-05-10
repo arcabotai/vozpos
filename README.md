@@ -12,6 +12,8 @@ VozPOS lets the merchant speak or type an order, confirm the parsed cart, genera
 
 ## Demo Flow
 
+Live app: https://vozpos.vercel.app
+
 1. Merchant says/types: "two coffees and one juice."
 2. VozPOS parses the cart and asks for confirmation.
 3. App creates a Solana Pay invoice with a unique reference.
