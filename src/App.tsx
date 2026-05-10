@@ -80,7 +80,7 @@ const proofCards = [
 ];
 
 const demoSteps = [
-  "Type or say: two coffees and one juice.",
+  "Type: two coffees and one juice.",
   "Create a Solana Pay invoice and show the QR/deep link.",
   "Reject a wrong payment to prove validation rules are visible.",
   "Accept the demo-valid payment and issue the receipt.",
@@ -287,10 +287,10 @@ function App() {
           <article className="copy-panel wide">
             <span className="label">Description</span>
             <p>
-              VozPOS turns a merchant phone into a voice-first crypto cashier for pop-up
-              shops and local vendors. The merchant speaks or types an order, confirms the
-              parsed cart, generates a Solana Pay invoice, and shows a mobile wallet QR/deep
-              link. The checkout flow rejects wrong payments and only unlocks a receipt when
+              VozPOS turns a merchant phone into a crypto cashier for pop-up shops and local
+              vendors. The merchant types an order, confirms the parsed cart, generates a Solana
+              Pay invoice, and shows a mobile wallet QR/deep link. The checkout flow rejects
+              wrong payments and only unlocks a receipt when
               amount, recipient, token, reference, expiry, confirmation, and duplicate-use
               checks pass in the demo validator. The ElevenLabs voice layer is intentionally
               parked for a future build so this live demo does not start or spend voice sessions.
@@ -343,7 +343,7 @@ function App() {
               <span>1</span>
               <h3>Order capture</h3>
             </div>
-            <label htmlFor="order">Merchant says or types</label>
+            <label htmlFor="order">Merchant types</label>
             <textarea
               id="order"
               value={orderText}
