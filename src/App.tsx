@@ -34,6 +34,9 @@ const base58 = "123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz";
 const elevenLabsAgentId =
   import.meta.env.VITE_ELEVENLABS_AGENT_ID || "agent_8601kr8a686gfkja545y8erwr8a0";
 
+const oneLiner =
+  "Voice-first Solana Mobile cashier that turns spoken orders into Solana Pay invoices and validated receipts.";
+
 const catalog: CatalogItem[] = [
   { key: "coffee", label: "Coffee", aliases: ["coffee", "coffees", "cafe", "cafes"], price: 3 },
   { key: "juice", label: "Juice", aliases: ["juice", "juices", "jugo", "jugos"], price: 2 },
@@ -55,6 +58,48 @@ const numberWords: Record<string, number> = {
   five: 5,
   cinco: 5,
 };
+
+const proofCards = [
+  {
+    title: "Solana Mobile",
+    body: "Phone-sized cashier flow with QR and solana: deep link handoff for mobile wallets.",
+    status: "Claim",
+  },
+  {
+    title: "ElevenLabs",
+    body: "Live Conversational AI cashier starts a voice session and receives checkout context.",
+    status: "Claim",
+  },
+  {
+    title: "Solana Pay",
+    body: "Each invoice includes amount, USDC mint, memo, label, and a valid 32-byte reference.",
+    status: "Core",
+  },
+  {
+    title: "LI.FI",
+    body: "Documented as a next-step bridge/top-up path. Not claimed in this submission.",
+    status: "Not claimed",
+  },
+];
+
+const demoSteps = [
+  "Type or say: two coffees and one juice.",
+  "Create a Solana Pay invoice and show the QR/deep link.",
+  "Reject a wrong payment to prove validation rules are visible.",
+  "Accept the demo-valid payment and issue the receipt.",
+  "Start ElevenLabs voice and send checkout context.",
+];
+
+const techStack = [
+  "React",
+  "TypeScript",
+  "Vite",
+  "Solana Pay URL scheme",
+  "SPL USDC reference flow",
+  "ElevenLabs React SDK",
+  "qrcode.react",
+  "Vercel",
+];
 
 function randomBase58(length: number) {
   const bytes = new Uint8Array(length);
@@ -170,7 +215,7 @@ function App() {
       status: "idle",
       title: "Invoice ready",
       checks: [
-        "Unique Solana Pay reference generated.",
+        "Valid 32-byte Solana reference generated.",
         "Merchant wallet and USDC mint attached.",
         "Waiting for payment validation.",
       ],
@@ -210,22 +255,90 @@ function App() {
   return (
     <ConversationProvider agentId={elevenLabsAgentId} connectionType="websocket">
       <main className="app-shell">
-        <section className="hero">
-          <div>
+        <section className="hero" aria-labelledby="project-title">
+          <div className="hero-copy">
             <p className="eyebrow">Dev3pack x ChileDAO submission</p>
-            <h1>VozPOS</h1>
-            <p className="lede">
-              A voice-first Solana Mobile cashier for pop-up and local merchants.
-            </p>
+            <h1 id="project-title">VozPOS</h1>
+            <p className="lede">{oneLiner}</p>
+            <div className="hero-actions" aria-label="Project links">
+              <a className="primary-link" href="#demo">
+                Run demo
+              </a>
+              <a className="secondary-link" href="https://github.com/arcabotai/vozpos">
+                GitHub repo
+              </a>
+            </div>
           </div>
-          <div className="hero-proof" aria-label="Current demo status">
-            <span>merchant speaks</span>
-            <strong>{formatUsd(total || 0)}</strong>
-            <span>validated checkout</span>
+          <div className="submission-card" aria-label="Submission summary">
+            <span className="card-kicker">Submit with</span>
+            <strong>Solana Mobile + ElevenLabs</strong>
+            <dl>
+              <div>
+                <dt>Project name</dt>
+                <dd>VozPOS</dd>
+              </div>
+              <div>
+                <dt>Category</dt>
+                <dd>Payments / Commerce</dd>
+              </div>
+              <div>
+                <dt>Address</dt>
+                <dd>{merchantWallet}</dd>
+              </div>
+            </dl>
           </div>
         </section>
 
-        <section className="workflow" aria-label="VozPOS checkout demo">
+        <section className="copy-grid" aria-label="Submission form copy">
+          <article className="copy-panel wide">
+            <span className="label">Description</span>
+            <p>
+              VozPOS turns a merchant phone into a voice-first crypto cashier for pop-up
+              shops and local vendors. The merchant speaks or types an order, confirms the
+              parsed cart, generates a Solana Pay invoice, and shows a mobile wallet QR/deep
+              link. The checkout flow rejects wrong payments and only unlocks a receipt when
+              amount, recipient, token, reference, expiry, confirmation, and duplicate-use
+              checks pass in the demo validator. ElevenLabs is wired as the live cashier voice
+              layer: it can start a Conversational AI session and receive the current cart,
+              invoice, and validation state so the demo can be narrated hands-free.
+            </p>
+          </article>
+          <article className="copy-panel">
+            <span className="label">One-liner</span>
+            <p>{oneLiner}</p>
+          </article>
+          <article className="copy-panel">
+            <span className="label">Tech stack</span>
+            <div className="tag-cloud">
+              {techStack.map((item) => (
+                <span key={item}>{item}</span>
+              ))}
+            </div>
+          </article>
+        </section>
+
+        <section className="proof-grid" aria-label="Track proof">
+          {proofCards.map((card) => (
+            <article className="proof-card" key={card.title}>
+              <div>
+                <span>{card.status}</span>
+                <h2>{card.title}</h2>
+              </div>
+              <p>{card.body}</p>
+            </article>
+          ))}
+        </section>
+
+        <section className="demo-layout" id="demo" aria-label="VozPOS checkout demo">
+          <div className="demo-header">
+            <p className="eyebrow">Live demo surface</p>
+            <h2>Judge-ready checkout flow</h2>
+            <p>
+              This is the flow to record or present: order capture, Solana Pay invoice,
+              validation failure, validation success, receipt, then ElevenLabs narration.
+            </p>
+          </div>
+
           <form
             className="panel order-panel"
             onSubmit={(event) => {
@@ -235,9 +348,9 @@ function App() {
           >
             <div className="section-heading">
               <span>1</span>
-              <h2>Voice order</h2>
+              <h3>Order capture</h3>
             </div>
-            <label htmlFor="order">Merchant input</label>
+            <label htmlFor="order">Merchant says or types</label>
             <textarea
               id="order"
               value={orderText}
@@ -247,125 +360,134 @@ function App() {
             <button type="submit">Create Solana Pay invoice</button>
           </form>
 
-        <section className="panel">
-          <div className="section-heading">
-            <span>2</span>
-            <h2>Cart confirmation</h2>
-          </div>
-          <div className="cart-lines">
-            {cart.length === 0 ? (
-              <p className="muted">No recognized items yet.</p>
+          <section className="panel cart-panel">
+            <div className="section-heading">
+              <span>2</span>
+              <h3>Cart</h3>
+            </div>
+            <div className="cart-lines">
+              {cart.length === 0 ? (
+                <p className="muted">No recognized items yet.</p>
+              ) : (
+                cart.map((item) => (
+                  <div className="cart-line" key={item.key}>
+                    <span>
+                      {item.quantity} x {item.label}
+                    </span>
+                    <strong>{formatUsd(item.quantity * item.price)}</strong>
+                  </div>
+                ))
+              )}
+            </div>
+            <div className="total-row">
+              <span>Total</span>
+              <strong>{formatUsd(total)}</strong>
+            </div>
+          </section>
+
+          <section className="panel invoice-panel">
+            <div className="section-heading">
+              <span>3</span>
+              <h3>Invoice</h3>
+            </div>
+            {invoice ? (
+              <>
+                <div className="qr-wrap">
+                  <QRCodeSVG value={invoice.url} size={168} marginSize={1} />
+                </div>
+                <a className="deep-link" href={invoice.url}>
+                  Open Solana Pay link
+                </a>
+                <dl>
+                  <div>
+                    <dt>Invoice</dt>
+                    <dd>{invoice.id}</dd>
+                  </div>
+                  <div>
+                    <dt>Reference</dt>
+                    <dd>{invoice.reference}</dd>
+                  </div>
+                  <div>
+                    <dt>Expires</dt>
+                    <dd>{new Date(invoice.expiresAt).toLocaleTimeString()}</dd>
+                  </div>
+                </dl>
+              </>
             ) : (
-              cart.map((item) => (
-                <div className="cart-line" key={item.key}>
-                  <span>
-                    {item.quantity} x {item.label}
-                  </span>
-                  <strong>{formatUsd(item.quantity * item.price)}</strong>
-                </div>
-              ))
+              <p className="muted">Create an invoice to show the QR and deep link.</p>
             )}
-          </div>
-          <div className="total-row">
-            <span>Total</span>
-            <strong>{formatUsd(total)}</strong>
-          </div>
-        </section>
+          </section>
 
-        <section className="panel invoice-panel">
-          <div className="section-heading">
-            <span>3</span>
-            <h2>Invoice</h2>
-          </div>
-          {invoice ? (
-            <>
-              <div className="qr-wrap">
-                <QRCodeSVG value={invoice.url} size={168} marginSize={1} />
-              </div>
-              <a className="deep-link" href={invoice.url}>
-                Open Solana Pay link
-              </a>
-              <dl>
-                <div>
-                  <dt>Invoice</dt>
-                  <dd>{invoice.id}</dd>
-                </div>
-                <div>
-                  <dt>Reference</dt>
-                  <dd>{invoice.reference.slice(0, 12)}...</dd>
-                </div>
-                <div>
-                  <dt>Expires</dt>
-                  <dd>{new Date(invoice.expiresAt).toLocaleTimeString()}</dd>
-                </div>
-              </dl>
-            </>
-          ) : (
-            <p className="muted">Create an invoice to show the QR and deep link.</p>
-          )}
-        </section>
+          <section className={`panel validation-panel ${validation.status}`}>
+            <div className="section-heading">
+              <span>4</span>
+              <h3>Validation</h3>
+            </div>
+            <h4>{validation.title}</h4>
+            <ul>
+              {validation.checks.map((check) => (
+                <li key={check}>{check}</li>
+              ))}
+            </ul>
+            <div className="actions">
+              <button type="button" onClick={rejectWrongPayment} disabled={!invoice}>
+                Reject wrong payment
+              </button>
+              <button type="button" onClick={acceptDemoPayment} disabled={!invoice}>
+                Accept demo-valid payment
+              </button>
+            </div>
+          </section>
 
-        <section className={`panel validation-panel ${validation.status}`}>
-          <div className="section-heading">
-            <span>4</span>
-            <h2>Payment validation</h2>
-          </div>
-          <h3>{validation.title}</h3>
-          <ul>
-            {validation.checks.map((check) => (
-              <li key={check}>{check}</li>
-            ))}
-          </ul>
-          <div className="actions">
-            <button type="button" onClick={rejectWrongPayment} disabled={!invoice}>
-              Reject wrong payment
-            </button>
-            <button type="button" onClick={acceptDemoPayment} disabled={!invoice}>
-              Accept demo-valid payment
-            </button>
-          </div>
-        </section>
-
-        <section className="panel receipt-panel">
-          <div className="section-heading">
-            <span>5</span>
-            <h2>Receipt</h2>
-          </div>
-          {validation.status === "accepted" && invoice ? (
-            <>
-              <p className="receipt-status">Payment confirmed. Receipt issued.</p>
-              <dl>
-                <div>
-                  <dt>Proof</dt>
-                  <dd>{validation.proofId}</dd>
-                </div>
-                <div>
-                  <dt>Amount</dt>
-                  <dd>{formatUsd(invoice.total)}</dd>
-                </div>
-                <div>
-                  <dt>Mode</dt>
-                  <dd>Demo validator</dd>
-                </div>
-              </dl>
-            </>
-          ) : (
-            <p className="muted">Receipt unlocks only after validation passes.</p>
-          )}
-        </section>
-
-        <section className="panel topup-panel">
-          <div className="section-heading">
-            <span>+</span>
-            <h2>Cross-chain top-up</h2>
-          </div>
-          <p>
-            LI.FI path reserved for customers who need to bridge into Solana before checkout.
-            The submitted build marks execution as a next integration step.
-          </p>
-        </section>
+          <section className="panel receipt-panel">
+            <div className="section-heading">
+              <span>5</span>
+              <h3>Receipt</h3>
+            </div>
+            {validation.status === "accepted" && invoice ? (
+              <>
+                <p className="receipt-status">Payment confirmed. Receipt issued.</p>
+                <dl>
+                  <div>
+                    <dt>Proof</dt>
+                    <dd>{validation.proofId}</dd>
+                  </div>
+                  <div>
+                    <dt>Amount</dt>
+                    <dd>{formatUsd(invoice.total)}</dd>
+                  </div>
+                  <div>
+                    <dt>Mode</dt>
+                    <dd>Demo validator</dd>
+                  </div>
+                </dl>
+              </>
+            ) : (
+              <p className="muted">Receipt unlocks only after validation passes.</p>
+            )}
+          </section>
 
           <ElevenLabsPanel cart={cart} invoice={invoice} validation={validation} />
+        </section>
+
+        <section className="script-panel" aria-label="Demo script and honesty notes">
+          <article>
+            <span className="label">Recording script</span>
+            <ol>
+              {demoSteps.map((step) => (
+                <li key={step}>{step}</li>
+              ))}
+            </ol>
+          </article>
+          <article>
+            <span className="label">Real vs demo-limited</span>
+            <p>
+              Real: Solana Pay URL generation, valid references, QR/deep links, mobile-first
+              checkout UI, receipt state machine, and ElevenLabs session/context handoff.
+              Demo-limited: payment acceptance is simulated unless a live transaction is added
+              during recording. No custom Solana program and no LI.FI execution claim.
+            </p>
+          </article>
         </section>
       </main>
     </ConversationProvider>
@@ -387,7 +509,11 @@ function ElevenLabsPanel({
     onDisconnect: () => setLastEvent("Voice cashier disconnected."),
     onError: (message) => setLastEvent(`Voice error: ${message}`),
     onMessage: (message) => {
-      const payload = message as { agent_response?: unknown; user_transcript?: unknown; text?: unknown };
+      const payload = message as {
+        agent_response?: unknown;
+        user_transcript?: unknown;
+        text?: unknown;
+      };
       const text =
         typeof payload.agent_response === "string"
           ? payload.agent_response
@@ -395,7 +521,7 @@ function ElevenLabsPanel({
             ? payload.user_transcript
             : typeof payload.text === "string"
               ? payload.text
-            : "ElevenLabs message received.";
+              : "ElevenLabs message received.";
       setLastEvent(text);
     },
   });
@@ -421,11 +547,11 @@ function ElevenLabsPanel({
     <section className="panel elevenlabs-panel">
       <div className="section-heading">
         <span>AI</span>
-        <h2>ElevenLabs cashier</h2>
+        <h3>ElevenLabs cashier</h3>
       </div>
       <p>
-        Live Conversational AI agent wired through <code>@elevenlabs/react</code>. It can narrate
-        the checkout and receive invoice context without touching funds.
+        Live Conversational AI agent wired through <code>@elevenlabs/react</code>. It narrates
+        the checkout and receives invoice context without signing or moving funds.
       </p>
       <div className="voice-status">
         <span>Status</span>
