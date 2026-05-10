@@ -25,7 +25,7 @@ Live app: https://vozpos.vercel.app
 
 - Solana: Solana Pay invoice URL, unique references, validation rules, receipt proof.
 - Solana Mobile: mobile-first phone-as-terminal checkout flow.
-- ElevenLabs: voice cashier path is designed for tool-calling voice integration; current submission includes manual/browser fallback for reliability.
+- ElevenLabs: live Conversational AI cashier wired through `@elevenlabs/react`; receives checkout context and narrates the flow without touching funds.
 - LI.FI: cross-chain top-up path is represented as a product path and documented as the next execution step.
 
 ## Architecture
@@ -33,6 +33,7 @@ Live app: https://vozpos.vercel.app
 - Vite + React + TypeScript frontend.
 - Solana Pay URL generation with merchant wallet, USDC mint, unique reference, label, message, and memo.
 - Demo payment validator checks reference, recipient, amount, token, expiry, duplicate-use, and confirmation semantics before issuing a receipt.
+- ElevenLabs agent panel starts a live voice session and sends current cart, invoice, and validation context to the cashier agent.
 - QR/deep link handoff for mobile wallet payment.
 
 ## Setup
@@ -54,11 +55,11 @@ npm run build
 VITE_SOLANA_RPC_URL=
 VITE_SOLANA_CLUSTER=devnet
 VITE_MERCHANT_WALLET=
-VITE_ELEVENLABS_AGENT_ID=
+VITE_ELEVENLABS_AGENT_ID=agent_8601kr8a686gfkja545y8erwr8a0
 VITE_LIFI_API_KEY=
 ```
 
-Never commit real keys.
+Never commit real keys. The public ElevenLabs agent id is safe for the client; API keys stay out of the frontend.
 
 ## Real vs Mocked
 
@@ -68,13 +69,15 @@ Real in this prototype:
 - Cart parsing and merchant confirmation.
 - Solana Pay invoice URL/reference generation.
 - QR/deep link rendering.
+- ElevenLabs Conversational AI session control and checkout context handoff.
 - Payment validation rule flow.
 - Receipt screen.
 
 Demo-limited:
 
 - Payment acceptance is a clearly labeled demo validator unless a real transaction is added during recording.
-- ElevenLabs and LI.FI execution are documented integration paths, not hidden fake sponsor calls.
+- ElevenLabs does not sign transactions or validate chain settlement; it is a cashier voice layer.
+- LI.FI execution is a documented integration path, not a hidden fake sponsor call.
 - No custom Solana program. VozPOS uses Solana Pay / SPL transfer semantics with unique invoice references.
 
 ## Built During Dev3pack

@@ -249,6 +249,39 @@ ul {
   color: var(--muted);
 }
 
+.elevenlabs-panel {
+  grid-column: span 2;
+}
+
+.elevenlabs-panel p {
+  color: var(--muted);
+}
+
+.elevenlabs-panel code {
+  padding: 2px 5px;
+  background: #eef1f5;
+  color: var(--ink);
+}
+
+.voice-status {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 12px 0;
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+}
+
+.voice-status span,
+.voice-event {
+  color: var(--muted);
+}
+
+.voice-event {
+  min-height: 24px;
+  margin: 14px 0 0;
+}
+
 @media (max-width: 920px) {
   .app-shell {
     width: min(100% - 20px, 620px);
@@ -267,5 +300,9 @@ ul {
 
   .hero-proof {
     min-height: 130px;
+  }
+
+  .elevenlabs-panel {
+    grid-column: auto;
   }
 }
