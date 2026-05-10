@@ -1,6 +1,6 @@
 # VozPOS
 
-VozPOS turns a merchant's phone into a voice-operated Solana cashier.
+VozPOS turns a merchant's phone into a Solana cashier.
 
 ## Problem
 
@@ -8,13 +8,13 @@ Small and pop-up merchants need fast checkout without bulky POS hardware. Crypto
 
 ## Solution
 
-VozPOS lets the merchant speak or type an order, confirm the parsed cart, generate a Solana Pay invoice with a unique reference, validate the payment, and issue a receipt.
+VozPOS lets the merchant type an order, confirm the parsed cart, generate a Solana Pay invoice with a unique reference, validate the payment, and issue a receipt.
 
 ## Demo Flow
 
 Live app: https://vozpos.vercel.app
 
-1. Merchant says/types: "two coffees and one juice."
+1. Merchant enters: "two coffees and one juice."
 2. VozPOS parses the cart and asks for confirmation.
 3. App creates a Solana Pay invoice with a unique reference.
 4. Wrong payment is rejected.
@@ -25,7 +25,7 @@ Live app: https://vozpos.vercel.app
 
 - Solana: Solana Pay invoice URL, unique references, validation rules, receipt proof.
 - Solana Mobile: mobile-first phone-as-terminal checkout flow.
-- ElevenLabs: live Conversational AI cashier wired through `@elevenlabs/react`; receives checkout context and narrates the flow without touching funds.
+- ElevenLabs: parked for a future voice-cashier pass; no live sessions are started in the current app.
 - LI.FI: cross-chain top-up path is represented as a product path and documented as the next execution step.
 
 ## Architecture
@@ -33,7 +33,6 @@ Live app: https://vozpos.vercel.app
 - Vite + React + TypeScript frontend.
 - Solana Pay URL generation with merchant wallet, USDC mint, unique reference, label, message, and memo.
 - Demo payment validator checks reference, recipient, amount, token, expiry, duplicate-use, and confirmation semantics before issuing a receipt.
-- ElevenLabs agent panel starts a live voice session and sends current cart, invoice, and validation context to the cashier agent.
 - QR/deep link handoff for mobile wallet payment.
 
 ## Setup
@@ -55,11 +54,10 @@ npm run build
 VITE_SOLANA_RPC_URL=
 VITE_SOLANA_CLUSTER=devnet
 VITE_MERCHANT_WALLET=
-VITE_ELEVENLABS_AGENT_ID=agent_8601kr8a686gfkja545y8erwr8a0
 VITE_LIFI_API_KEY=
 ```
 
-Never commit real keys. The public ElevenLabs agent id is safe for the client; API keys stay out of the frontend.
+Never commit real keys. ElevenLabs is intentionally disabled in the current live build.
 
 ## Real vs Mocked
 
@@ -69,14 +67,13 @@ Real in this prototype:
 - Cart parsing and merchant confirmation.
 - Solana Pay invoice URL/reference generation.
 - QR/deep link rendering.
-- ElevenLabs Conversational AI session control and checkout context handoff.
 - Payment validation rule flow.
 - Receipt screen.
 
 Demo-limited:
 
 - Payment acceptance is a clearly labeled demo validator unless a real transaction is added during recording.
-- ElevenLabs does not sign transactions or validate chain settlement; it is a cashier voice layer.
+- ElevenLabs is parked for a future voice-cashier pass and is not active in the live build.
 - LI.FI execution is a documented integration path, not a hidden fake sponsor call.
 - No custom Solana program. VozPOS uses Solana Pay / SPL transfer semantics with unique invoice references.
 

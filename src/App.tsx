@@ -1,5 +1,4 @@
 import { useMemo, useState } from "react";
-import { ConversationProvider, useConversation } from "@elevenlabs/react";
 import { QRCodeSVG } from "qrcode.react";
 import "./App.css";
 
@@ -31,11 +30,9 @@ type ValidationState =
 const merchantWallet = "9xQeWvG816bUx9EPfW9XMRskhaZwoU7Tj9cxF8fK9F5";
 const usdcMint = "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v";
 const base58 = "123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz";
-const elevenLabsAgentId =
-  import.meta.env.VITE_ELEVENLABS_AGENT_ID || "agent_8601kr8a686gfkja545y8erwr8a0";
 
 const oneLiner =
-  "Voice-first Solana Mobile cashier that turns spoken orders into Solana Pay invoices and validated receipts.";
+  "Mobile Solana cashier that turns orders into Solana Pay invoices and validated receipts.";
 
 const catalog: CatalogItem[] = [
   { key: "coffee", label: "Coffee", aliases: ["coffee", "coffees", "cafe", "cafes"], price: 3 },
@@ -67,8 +64,8 @@ const proofCards = [
   },
   {
     title: "ElevenLabs",
-    body: "Live Conversational AI cashier starts a voice session and receives checkout context.",
-    status: "Claim",
+    body: "Parked for a future voice-cashier pass instead of running live sessions now.",
+    status: "Future",
   },
   {
     title: "Solana Pay",
@@ -87,7 +84,6 @@ const demoSteps = [
   "Create a Solana Pay invoice and show the QR/deep link.",
   "Reject a wrong payment to prove validation rules are visible.",
   "Accept the demo-valid payment and issue the receipt.",
-  "Start ElevenLabs voice and send checkout context.",
 ];
 
 const techStack = [
@@ -96,7 +92,6 @@ const techStack = [
   "Vite",
   "Solana Pay URL scheme",
   "SPL USDC reference flow",
-  "ElevenLabs React SDK",
   "qrcode.react",
   "Vercel",
 ];
@@ -253,8 +248,7 @@ function App() {
   }
 
   return (
-    <ConversationProvider agentId={elevenLabsAgentId} connectionType="websocket">
-      <main className="app-shell">
+    <main className="app-shell">
         <section className="hero" aria-labelledby="project-title">
           <div className="hero-copy">
             <p className="eyebrow">Dev3pack x ChileDAO submission</p>
@@ -271,7 +265,7 @@ function App() {
           </div>
           <div className="submission-card" aria-label="Submission summary">
             <span className="card-kicker">Submit with</span>
-            <strong>Solana Mobile + ElevenLabs</strong>
+            <strong>Solana Mobile</strong>
             <dl>
               <div>
                 <dt>Project name</dt>
@@ -298,9 +292,8 @@ function App() {
               parsed cart, generates a Solana Pay invoice, and shows a mobile wallet QR/deep
               link. The checkout flow rejects wrong payments and only unlocks a receipt when
               amount, recipient, token, reference, expiry, confirmation, and duplicate-use
-              checks pass in the demo validator. ElevenLabs is wired as the live cashier voice
-              layer: it can start a Conversational AI session and receive the current cart,
-              invoice, and validation state so the demo can be narrated hands-free.
+              checks pass in the demo validator. The ElevenLabs voice layer is intentionally
+              parked for a future build so this live demo does not start or spend voice sessions.
             </p>
           </article>
           <article className="copy-panel">
@@ -335,7 +328,7 @@ function App() {
             <h2>Judge-ready checkout flow</h2>
             <p>
               This is the flow to record or present: order capture, Solana Pay invoice,
-              validation failure, validation success, receipt, then ElevenLabs narration.
+              validation failure, validation success, then receipt.
             </p>
           </div>
 
@@ -467,7 +460,6 @@ function App() {
             )}
           </section>
 
-          <ElevenLabsPanel cart={cart} invoice={invoice} validation={validation} />
         </section>
 
         <section className="script-panel" aria-label="Demo script and honesty notes">
@@ -483,105 +475,13 @@ function App() {
             <span className="label">Real vs demo-limited</span>
             <p>
               Real: Solana Pay URL generation, valid references, QR/deep links, mobile-first
-              checkout UI, receipt state machine, and ElevenLabs session/context handoff.
-              Demo-limited: payment acceptance is simulated unless a live transaction is added
-              during recording. No custom Solana program and no LI.FI execution claim.
+              checkout UI, and receipt state machine. Demo-limited: payment acceptance is
+              simulated unless a live transaction is added during recording. No active
+              ElevenLabs session, no custom Solana program, and no LI.FI execution claim.
             </p>
           </article>
         </section>
       </main>
-    </ConversationProvider>
-  );
-}
-
-function ElevenLabsPanel({
-  cart,
-  invoice,
-  validation,
-}: {
-  cart: CartLine[];
-  invoice: Invoice | null;
-  validation: ValidationState;
-}) {
-  const [lastEvent, setLastEvent] = useState("Ready to connect the live ElevenLabs cashier.");
-  const conversation = useConversation({
-    onConnect: ({ conversationId }) => setLastEvent(`Connected: ${conversationId}`),
-    onDisconnect: () => setLastEvent("Voice cashier disconnected."),
-    onError: (message) => setLastEvent(`Voice error: ${message}`),
-    onMessage: (message) => {
-      const payload = message as {
-        agent_response?: unknown;
-        user_transcript?: unknown;
-        text?: unknown;
-      };
-      const text =
-        typeof payload.agent_response === "string"
-          ? payload.agent_response
-          : typeof payload.user_transcript === "string"
-            ? payload.user_transcript
-            : typeof payload.text === "string"
-              ? payload.text
-              : "ElevenLabs message received.";
-      setLastEvent(text);
-    },
-  });
-
-  function sendCheckoutContext() {
-    conversation.sendContextualUpdate(
-      [
-        "You are VozPOS, a concise voice cashier for a Solana Mobile checkout demo.",
-        `Cart: ${cart
-          .map((item) => `${item.quantity} ${item.label}`)
-          .join(", ") || "empty"}.`,
-        invoice
-          ? `Invoice ${invoice.id}, amount ${formatUsd(invoice.total)}, reference ${invoice.reference}.`
-          : "No invoice created yet.",
-        `Validation state: ${validation.status}.`,
-        "Never sign transactions or claim money moved. Explain invoice creation, validation, and receipt status.",
-      ].join(" "),
-    );
-    setLastEvent("Checkout context sent to ElevenLabs agent.");
-  }
-
-  return (
-    <section className="panel elevenlabs-panel">
-      <div className="section-heading">
-        <span>AI</span>
-        <h3>ElevenLabs cashier</h3>
-      </div>
-      <p>
-        Live Conversational AI agent wired through <code>@elevenlabs/react</code>. It narrates
-        the checkout and receives invoice context without signing or moving funds.
-      </p>
-      <div className="voice-status">
-        <span>Status</span>
-        <strong>{conversation.status}</strong>
-      </div>
-      <div className="actions">
-        <button
-          type="button"
-          onClick={() => conversation.startSession()}
-          disabled={conversation.status === "connected" || conversation.status === "connecting"}
-        >
-          Start ElevenLabs voice
-        </button>
-        <button
-          type="button"
-          onClick={sendCheckoutContext}
-          disabled={conversation.status !== "connected"}
-        >
-          Send checkout context
-        </button>
-        <button
-          type="button"
-          onClick={() => conversation.endSession()}
-          disabled={conversation.status !== "connected"}
-        >
-          End voice
-        </button>
-      </div>
-      <p className="voice-event">{lastEvent}</p>
-    </section>
   );
 }
 

@@ -196,8 +196,7 @@ dd {
 .copy-panel p,
 .proof-card p,
 .demo-header p,
-.script-panel p,
-.elevenlabs-panel p {
+.script-panel p {
   color: var(--muted);
   line-height: 1.58;
 }
@@ -275,8 +274,7 @@ dd {
 }
 
 .validation-panel,
-.receipt-panel,
-.elevenlabs-panel {
+.receipt-panel {
   grid-column: span 2;
 }
 
@@ -398,12 +396,6 @@ ol {
   font-weight: 850;
 }
 
-.elevenlabs-panel code {
-  padding: 2px 5px;
-  background: #eef1f5;
-  color: var(--ink);
-}
-
 .voice-status {
   display: flex;
   justify-content: space-between;
@@ -454,8 +446,7 @@ ol {
   .cart-panel,
   .invoice-panel,
   .validation-panel,
-  .receipt-panel,
-  .elevenlabs-panel {
+  .receipt-panel {
     grid-column: span 3;
   }
 }
@@ -481,8 +472,7 @@ ol {
   .cart-panel,
   .invoice-panel,
   .validation-panel,
-  .receipt-panel,
-  .elevenlabs-panel {
+  .receipt-panel {
     grid-column: auto;
   }
 

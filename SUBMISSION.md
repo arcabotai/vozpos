@@ -4,9 +4,9 @@
 
 Project name: VozPOS
 
-One-liner: Voice-first Solana Mobile cashier that turns spoken orders into Solana Pay invoices and validated receipts.
+One-liner: Mobile Solana cashier that turns orders into Solana Pay invoices and validated receipts.
 
-Partner tracks: Solana Mobile, ElevenLabs
+Partner tracks: Solana Mobile
 
 Category: Payments / Commerce
 
@@ -18,15 +18,15 @@ Local hub: Santiago, Chile
 
 ## Description
 
-VozPOS turns a merchant phone into a voice-first crypto cashier for pop-up shops and local vendors. The merchant speaks or types an order, confirms the parsed cart, generates a Solana Pay invoice, and shows a mobile wallet QR/deep link.
+VozPOS turns a merchant phone into a crypto cashier for pop-up shops and local vendors. The merchant types an order, confirms the parsed cart, generates a Solana Pay invoice, and shows a mobile wallet QR/deep link.
 
 The checkout flow rejects wrong payments and only unlocks a receipt when amount, recipient, token, reference, expiry, confirmation, and duplicate-use checks pass in the demo validator. Each invoice uses a valid 32-byte Solana reference, encoded as base58, so the payment can be tied back to one checkout.
 
-ElevenLabs is wired as the live cashier voice layer: it can start a Conversational AI session and receive the current cart, invoice, and validation state so the demo can be narrated hands-free. The app is intentionally honest about scope: Solana Pay generation, mobile checkout UI, receipt state, and ElevenLabs session/context handoff are real; chain settlement is demo-limited unless a live transaction is added during recording.
+The ElevenLabs voice layer is parked for a future build so the current live app does not start or spend voice sessions. The app is intentionally honest about scope: Solana Pay generation, mobile checkout UI, and receipt state are real; chain settlement is demo-limited unless a live transaction is added during recording.
 
 ## Tech Stack
 
-React, TypeScript, Vite, Solana Pay URL scheme, SPL USDC reference flow, ElevenLabs React SDK, qrcode.react, Vercel.
+React, TypeScript, Vite, Solana Pay URL scheme, SPL USDC reference flow, qrcode.react, Vercel.
 
 ## Links
 
@@ -36,12 +36,12 @@ GitHub repo: https://github.com/arcabotai/vozpos
 
 ## Demo Script
 
-1. Type or say: "two coffees and one juice."
+1. Type: "two coffees and one juice."
 2. Create a Solana Pay invoice and show the QR/deep link.
 3. Reject a wrong payment to prove validation rules are visible.
 4. Accept the demo-valid payment and issue the receipt.
-5. Start ElevenLabs voice and send checkout context.
 
 ## Do Not Claim
 
 Do not claim LI.FI. It is documented as a next-step bridge/top-up path only.
+Do not claim active ElevenLabs integration. It is parked for a later voice pass.

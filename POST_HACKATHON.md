@@ -13,14 +13,15 @@ The strongest direction is a voice-first Solana Mobile checkout where a merchant
 - Public repo: https://github.com/arcabotai/vozpos
 - Live prototype: https://vozpos.vercel.app
 - Local repo: `/Users/arca/.openclaw/workspace/vozpos`
-- Current prototype includes React/Vite UI, cart parsing, Solana Pay URL generation, valid base58 Solana references, QR/deep link handoff, demo validation states, receipts, and ElevenLabs voice-session wiring.
+- Current prototype includes React/Vite UI, cart parsing, Solana Pay URL generation, valid base58 Solana references, QR/deep link handoff, demo validation states, and receipts.
+- ElevenLabs voice-session wiring was removed from the live app on 2026-05-10 to avoid spending sessions while the project is paused.
 - `SUBMISSION.md` contains the paste-ready hackathon submission copy if this is ever revived.
 
 ## Do Not Overclaim
 
 - Solana Pay invoice generation is real.
 - Solana Mobile positioning is real as a phone-first checkout UX.
-- ElevenLabs session/context handoff is wired, but it does not move funds.
+- ElevenLabs is a future voice-cashier pass, not active in the current live app.
 - Payment settlement is demo-limited unless connected to real transaction polling.
 - LI.FI is only a future cross-chain top-up path, not currently implemented.
 - No custom Solana program is deployed.
